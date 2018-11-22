@@ -21,7 +21,6 @@ class Exchange:
         # time of execution; time of post; price; quantity; aggresor; passor; ag order type
         self.priority = ['price','t']
         self.clock = clock
-        self.lastprice = None
         
     def post(self, price, quantity, trader, order_type):
         self.process_order(self.order(price, self.clock.time, quantity, trader, order_type))
@@ -53,32 +52,26 @@ class Exchange:
                     matching = False
                 else:
                     if price >= best_ask.price:
-	                	if best_ask.trader == order.trader:
-	                		# matched with self; cancel old order; queue new order
-	                		heapq.heappop(self.asks)
-	                		matching = False
-	                	else:
-	                        # order can be matched
-	                        trade_price = best_ask.price
-	                        if quantity < best_ask.quantity:
-	                            new_ask = best_ask._replace(quantity = best_ask.quantity - quantity)
-	                            heapq.heapreplace(self.asks,new_ask)
-	                            trade_quantity = quantity
-	                            quantity = 0
-	                            matching = False
-	                        elif quantity == best_ask.quantity:
-	                            heapq.heappop(self.asks)
-	                            trade_quantity = quantity
-	                            quantity = 0
-	                            matching = False
-	                        elif quantity > best_ask.quantity:
-	                            heapq.heappop(self.asks)
-	                            trade_quantity = best_ask.quantity
-	                            quantity = quantity - best_ask.quantity
-	                        self.lastprice = trade_price
-	                        self.trades.append((self.clock.time,best_ask.t,
-	                                       trade_price,trade_quantity,
-	                                       order.trader,best_ask.trader,1))
+                        # order can be matched
+                        trade_price = best_ask.price
+                        if quantity < best_ask.quantity:
+                            new_ask = best_ask._replace(quantity = best_ask.quantity - quantity)
+                            heapq.heapreplace(self.asks,new_ask)
+                            trade_quantity = quantity
+                            quantity = 0
+                            matching = False
+                        elif quantity == best_ask.quantity:
+                            heapq.heappop(self.asks)
+                            trade_quantity = quantity
+                            quantity = 0
+                            matching = False
+                        elif quantity > best_ask.quantity:
+                            heapq.heappop(self.asks)
+                            trade_quantity = best_ask.quantity
+                            quantity = quantity - best_ask.quantity
+                        self.trades.append((self.clock.time,best_ask.t,
+                                       trade_price,trade_quantity,
+                                       order.trader,best_ask.trader,1))
                     else:
                         matching = False
             # put onto order book
@@ -98,32 +91,27 @@ class Exchange:
                     matching = False
                 else:
                     if price >= best_bid.price:
-                    	if best_bid.trader == order.trader:
-	                		# matched with self; cancel old order; queue new order
-	                		heapq.heappop(self.bids)
-	                		matching = False
-	                	else:
-	                        # order can be matched
-	                        trade_price = -best_bid.price
-	                        if quantity < best_bid.quantity:
-	                            new_bid = best_bid._replace(quantity = best_bid.quantity - quantity)
-	                            heapq.heapreplace(self.bids,new_bid)
-	                            trade_quantity = quantity
-	                            quantity = 0
-	                            matching = False
-	                        elif quantity == best_bid.quantity:
-	                            heapq.heappop(self.bids)
-	                            trade_quantity = quantity
-	                            quantity = 0
-	                            matching = False
-	                        elif quantity > best_bid.quantity:
-	                            heapq.heappop(self.bids)
-	                            trade_quantity = best_bid.quantity
-	                            quantity = quantity - best_bid.quantity
-	                        self.lastprice = trade_price
-	                        self.trades.append((self.clock.time,best_bid.t,
-	                                       trade_price,trade_quantity,
-	                                       order.trader,best_bid.trader,-1))
+                        # order can be matched
+                        trade_price = -best_bid.price
+                        if quantity < best_bid.quantity:
+                            new_bid = best_bid._replace(quantity = best_bid.quantity - quantity)
+                            heapq.heapreplace(self.bids,new_bid)
+                            trade_quantity = quantity
+                            quantity = 0
+                            matching = False
+                        elif quantity == best_bid.quantity:
+                            heapq.heappop(self.bids)
+                            trade_quantity = quantity
+                            quantity = 0
+                            matching = False
+                        elif quantity > best_bid.quantity:
+                            heapq.heappop(self.bids)
+                            trade_quantity = best_bid.quantity
+                            quantity = quantity - best_bid.quantity
+                        self.lastprice = trade_price
+                        self.trades.append((self.clock.time,best_bid.t,
+                                       trade_price,trade_quantity,
+                                       order.trader,best_bid.trader,-1))
                     else:
                         matching = False
             # put onto order book
