@@ -53,11 +53,11 @@ class Exchange:
                     matching = False
                 else:
                     if price >= best_ask.price:
-	                	if best_ask.trader == order.trader:
-	                		# matched with self; cancel old order; queue new order
-	                		heapq.heappop(self.asks)
-	                		matching = False
-	                	else:
+	                    if best_ask.trader == order.trader:
+	                        # matched with self; cancel old order; queue new order
+	                        heapq.heappop(self.asks)
+	                        matching = False
+	                    else:
 	                        # order can be matched
 	                        trade_price = best_ask.price
 	                        if quantity < best_ask.quantity:
@@ -98,11 +98,11 @@ class Exchange:
                     matching = False
                 else:
                     if price >= best_bid.price:
-                    	if best_bid.trader == order.trader:
-	                		# matched with self; cancel old order; queue new order
-	                		heapq.heappop(self.bids)
-	                		matching = False
-	                	else:
+                        if best_bid.trader == order.trader:
+	                        # matched with self; cancel old order; queue new order
+	                        heapq.heappop(self.bids)
+	                        matching = False
+                        else:
 	                        # order can be matched
 	                        trade_price = -best_bid.price
 	                        if quantity < best_bid.quantity:
