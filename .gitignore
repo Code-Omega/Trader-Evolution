@@ -1,2 +1,4 @@
 
 .ipynb_checkpoints/Simulation-checkpoint.ipynb
+
+*.pyc
